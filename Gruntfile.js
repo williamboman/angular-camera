@@ -63,13 +63,21 @@ module.exports = function(grunt) {
                 cssDir: 'dist'
               }
             }
+        },
+        autoprefixer: {
+              dev: {
+                src: 'src/**/*.css'
+              },
+              dist: {
+                src: 'dist/*.css'
+              }
         }
     });
 
 
-    grunt.registerTask('build', ['dev', 'clean:dist', 'concat', 'ngmin', 'uglify', 'compass:dist']);
+    grunt.registerTask('build', ['dev', 'clean:dist', 'concat', 'ngmin', 'uglify', 'compass:dist', 'autoprefixer:dist']);
 
-    grunt.registerTask('dev', ['coffee:dev', 'compass:dev']);
+    grunt.registerTask('dev', ['coffee:dev', 'compass:dev', 'autoprefixer:dev']);
 
     grunt.registerTask('default', ['build']);
 };
