@@ -7,11 +7,19 @@ angular.module('omr.directives', [])
         <p ng-hide="isLoaded">Loading Camera...</p>
         <p ng-show="noCamera">Couldn\'t find a camera to use</p>
         <div class="ng-camera-stack" ng-hide="!isLoaded">
+          <div class="ng-camera-confirm" ng-show="isConfirming">
+            <img ng-src="{{media}}" alt="Your picture">
+            <div class="ng-camera-confirm-dialog">
+              Are you happy with your picture?
+              <button class="btn btn-success btn-sm" ng-click="confirmPic(true)">Yes</button>
+              <button class="btn btn-danger btn-sm" ng-click="confirmPic(false)">No, let\'s try again</button>
+            </div>
+          </div>
           <div class="ng-camera-countdown" ng-show="activeCountdown">
             <p class="tick">{{countdownText}}</p>
           </div>
           <img class="ng-camera-overlay" ng-hide="!overlaySrc" ng-src="{{overlaySrc}}" width="{{width}}" height="{{height}}">
-          <video id="ng-camera-feed" autoplay src="{{videoStream}}">Install Browser\'s latest version</video>
+          <video ng-hide="isConfirming" id="ng-camera-feed" autoplay ng-src="{{videoStream}}">Install Browser\'s latest version</video>
           <canvas id="ng-photo-canvas" width="{{width}}" height="{{height}}" style="display:none;"></canvas>
         </div>
         <div class="ng-camera-controls" ng-hide="hideUI">
@@ -31,9 +39,11 @@ angular.module('omr.directives', [])
       captureCallback: '&capture'
       enabled: '='
       captureMessage: "@"
+      confirm: '@'
     link: (scope, element, attrs, ngModel) ->
 
       scope.activeCountdown = false
+      scope.hideUI = true
 
       # Remap common references
       navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
@@ -55,6 +65,7 @@ angular.module('omr.directives', [])
             scope.stream = stream
             scope.isLoaded = true
             scope.videoStream = $sce.trustAsResourceUrl(window.URL.createObjectURL(stream))
+            scope.hideUI = false
         , (error) ->
           scope.$apply ->
             scope.isLoaded = true
@@ -71,6 +82,12 @@ angular.module('omr.directives', [])
           scope.$apply ->
             scope.videoStream = ""
         , ->
+
+      scope.confirmPic = (bool) ->
+        if bool
+          scope.captureCallback(scope.media)
+        else
+          scope.isConfirming = false
 
       ###*
       * @description Capture current state of video stream as photo
@@ -107,10 +124,13 @@ angular.module('omr.directives', [])
                 # Wait for overlay image to load before making dataURL
                 scope.$apply ->
                   scope.media = canvas.toDataURL('image/jpeg')
-                  scope.captureCallback(scope.media) if scope.captureCallback?
+                  scope.captureCallback(scope.media) if scope.captureCallback? && !scope.confirm
             else
               scope.media = canvas.toDataURL('image/jpeg') # Assign to ngModel
-              scope.captureCallback(scope.media) if scope.captureCallback?
+              scope.captureCallback(scope.media) if scope.captureCallback? && !scope.confirm
+
+            if scope.confirm
+              scope.isConfirming = true
 
             scope.hideUI = false
           , countdownTime + 1000 # Add extra second for final message

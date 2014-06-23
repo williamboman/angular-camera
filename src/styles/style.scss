@@ -11,6 +11,28 @@
   }
 
   .ng-camera-stack {
+    position: relative;
+
+    .ng-camera-confirm {
+      position: relative;
+
+      img {
+        height: 100%;
+        width: 100%;
+        display: block;
+      }
+
+      .ng-camera-confirm-dialog {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: #f7f7f7;
+        font-size: 12px;
+        padding: 5px 10px;
+      }
+    }
 
     video {
       display: block;
