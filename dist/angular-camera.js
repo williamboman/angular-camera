@@ -87,12 +87,12 @@
                 context.drawImage(cameraFeed, 0, 0, scope.width, scope.height);
                 if (scope.overlaySrc != null) {
                   scope.addFrame(context, scope.overlaySrc, function (image) {
-                    scope.$apply(function () {
-                      return scope.media = canvas.toDataURL('image/jpeg');
+                    return scope.$apply(function () {
+                      scope.media = canvas.toDataURL('image/jpeg');
+                      if (scope.captureCallback != null) {
+                        return scope.captureCallback(scope.media);
+                      }
                     });
-                    if (scope.captureCallback != null) {
-                      return scope.captureCallback(scope.media);
-                    }
                   });
                 } else {
                   scope.media = canvas.toDataURL('image/jpeg');
