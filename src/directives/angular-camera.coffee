@@ -3,7 +3,7 @@
 angular.module('omr.directives', [])
   .directive 'ngCamera', ($timeout, $sce) ->
     require: 'ngModel'
-    template: '<div class="ng-camera clearfix" style="width: {{width}}px; height: {{height}}px">
+    template: '<div class="ng-camera clearfix">
         <p ng-hide="isLoaded">Loading Camera...</p>
         <p ng-show="noCamera">Couldn\'t find a camera to use</p>
         <div class="ng-camera-stack" ng-hide="!isLoaded">
