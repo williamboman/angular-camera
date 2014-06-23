@@ -15,7 +15,7 @@ angular.module('omr.directives', [])
           <canvas id="ng-photo-canvas" width="{{width}}" height="{{height}}" style="display:none;"></canvas>
         </div>
         <div class="ng-camera-controls" ng-hide="hideUI">
-          <button class="btn btn-primary ng-camera-take-btn" ng-click="takePicture()">Take Picture</button>
+          <button class="btn btn-primary ng-camera-take-btn" ng-click="takePicture()"><i class="fa fa-camera"></i></button>
         </div>
       </div>'
     replace: true
@@ -76,7 +76,7 @@ angular.module('omr.directives', [])
       * @description Capture current state of video stream as photo
       ###
       scope.takePicture = ->
-        canvas = window.document.getElementById('ng-photo-canvas')
+        canvas = angular.element('#ng-photo-canvas')[0]
 
         # Get countdown time in seconds from attribute
         countdownTime = if scope.countdown? then parseInt(scope.countdown) * 1000 else 0
@@ -98,7 +98,7 @@ angular.module('omr.directives', [])
             scope.activeCountdown = false
 
             # Draw current video feed to canvas (photo source)
-            cameraFeed = window.document.getElementById('ng-camera-feed')
+            cameraFeed = angular.element('#ng-camera-feed')[0]
             context.drawImage cameraFeed, 0, 0, scope.width, scope.height
 
             # Add overlay if present

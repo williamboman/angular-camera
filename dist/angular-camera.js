@@ -6,7 +6,7 @@
     function ($timeout, $sce) {
       return {
         require: 'ngModel',
-        template: '<div class="ng-camera clearfix">        <p ng-hide="isLoaded">Loading Camera...</p>        <p ng-show="noCamera">Couldn\'t find a camera to use</p>        <div class="ng-camera-stack" ng-hide="!isLoaded">          <div class="ng-camera-countdown" ng-show="activeCountdown">            <p class="tick">{{countdownText}}</p>          </div>          <img class="ng-camera-overlay" ng-hide="!overlaySrc" ng-src="{{overlaySrc}}" width="{{width}}" height="{{height}}">          <video id="ng-camera-feed" autoplay src="{{videoStream}}">Install Browser\'s latest version</video>          <canvas id="ng-photo-canvas" width="{{width}}" height="{{height}}" style="display:none;"></canvas>        </div>        <div class="ng-camera-controls" ng-hide="hideUI">          <button class="btn btn-primary ng-camera-take-btn" ng-click="takePicture()">Take Picture</button>        </div>      </div>',
+        template: '<div class="ng-camera clearfix">        <p ng-hide="isLoaded">Loading Camera...</p>        <p ng-show="noCamera">Couldn\'t find a camera to use</p>        <div class="ng-camera-stack" ng-hide="!isLoaded">          <div class="ng-camera-countdown" ng-show="activeCountdown">            <p class="tick">{{countdownText}}</p>          </div>          <img class="ng-camera-overlay" ng-hide="!overlaySrc" ng-src="{{overlaySrc}}" width="{{width}}" height="{{height}}">          <video id="ng-camera-feed" autoplay src="{{videoStream}}">Install Browser\'s latest version</video>          <canvas id="ng-photo-canvas" width="{{width}}" height="{{height}}" style="display:none;"></canvas>        </div>        <div class="ng-camera-controls" ng-hide="hideUI">          <button class="btn btn-primary ng-camera-take-btn" ng-click="takePicture()"><i class="fa fa-camera"></i></button>        </div>      </div>',
         replace: true,
         transclude: true,
         restrict: 'E',
@@ -69,7 +69,7 @@
         */
           scope.takePicture = function () {
             var canvas, context, countdownTick, countdownTime;
-            canvas = window.document.getElementById('ng-photo-canvas');
+            canvas = angular.element('#ng-photo-canvas')[0];
             countdownTime = scope.countdown != null ? parseInt(scope.countdown) * 1000 : 0;
             if (canvas != null) {
               if (countdownTime > 0) {
@@ -83,7 +83,7 @@
               scope.countdownTimer = $timeout(function () {
                 var cameraFeed;
                 scope.activeCountdown = false;
-                cameraFeed = window.document.getElementById('ng-camera-feed');
+                cameraFeed = angular.element('#ng-camera-feed')[0];
                 context.drawImage(cameraFeed, 0, 0, scope.width, scope.height);
                 if (scope.overlaySrc != null) {
                   scope.addFrame(context, scope.overlaySrc, function (image) {
