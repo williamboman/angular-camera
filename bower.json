@@ -17,7 +17,7 @@
     "video"
   ],
   "dependencies": {
-    "angular": "~1.2.0",
+    "angular": "1.*",
     "bootstrap": "~3",
     "font-awesome": "~4.1.0"
   },
